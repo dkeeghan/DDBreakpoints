@@ -1,163 +1,163 @@
 ![Deloitte Digital](docs/deloittedigital-logo-white.png)
 
-# DDBreakpoints
-Breakpoints SCSS Mixin and JavaScript library, used to accelerate and simplify media query development during the development process of responsive pages.
+# DDBreakpoints for LESS
+Breakpoints LESS Mixin and JavaScript library, used to accelerate and simplify media query development during the development process of responsive pages.
 
-The SCSS and JS also allow for the ability to create static (non-responsive) stylesheets as well by setting a variable allowing backwards support for non responsive browsers (like IE8) easily.
+The LESS and JS also allow for the ability to create static (non-responsive) stylesheets as well by setting a variable allowing backwards support for non responsive browsers (like IE8) easily.
+
+*This is a port of the official SCSS version found at [DDBreakpoints by DeloitteDigitalAPAC]https://github.com/DeloitteDigitalAPAC/DDBreakpoints*
 
 ## Getting Started
 
-### Install via NPM
+### LESS
 
-To install via [npm](https://www.npmjs.com/), enter the following at the command line:
+Import the LESS into your own project
 
-```
-npm install ddbreakpoints
-```
-
-### Install via Bower
-
-To install via [bower](http://twitter.github.com/bower/), enter the following at the command line:
-
-```
-bower install ddbreakpoints
-```
-
-### SCSS
-
-Import the SCSS into your own project
-
-```scss
-@import 'dd-breakpoints';
+```less
+@import 'dd-breakpoints.less';
 ```
 
 #### Usage
 
 At the most basic level, everything comes from a single mixin:
 
-```scss
-@include bp($min, $max:0, $property:width) {
+```less
+.bp(@min, {
     // your styles here
-}
+}}
+```
+
+or
+
+```less
+.bp(@min, @max=0, {
+    // your styles here
+}}
 ```
 
 The recommended usage for the mixin is to go mobile first:
 
-```scss
+```less
 .module {
     // base styles
 
-    @include bp(m) {
-        // medium styles
-    }
-    
-    @include bp(l) {
-        // large styles
-    }
+    .bp(m, {
+		// medium styles
+	});
 
-    @include bp(xl) {
+    .bp(l, {
+        // large styles
+    });
+
+    .bp(xl, {
         // extra large styles
         // not included in the static sheet
-    }
+    });
 }
 ```
 
 But if you have to, you can go large first too:
 
-```scss
+```less
 .module {
     // desktop styles
 
-    @include bp(0, l) {
+    .bp(0, l, {
         // large and below styles
-    }
+    });
 
-    @include bp(0, m) {
+    .bp(0, m, {
         // medium and below styles
         // not included in the static sheet
-    }
+    });
 
-    @include bp(0, s) {
+    .bp(0, s, {
         // small and below styles
         // not included in the static sheet
-    }
+    });
 }
 ```
 
 You can even use pixel based widths mixed with breakpoint names.
 
-```scss
+```less
 .module {
     // base styles
 
-    @include bp(300, m) {
+    .bp(300, m, {
         // between 300px (in ems) and medium breakpoint
         // not included in the static sheet
-    }
+    });
 
-    @include bp(m, 2000) {
+    .bp(m, 2000, {
         // between medium breakpoint and 2000px (in ems)
-    }
+    });
 
-    @include bp(200, 250) {
+    .bp(200, 250, {
         // be as specific as you need
         // not included in the static sheet
-    }
+    });
 }
 ```
 
 And you can also check against heights too
 
-```scss
+```less
 .module {
     // base styles
 
-    @include bp(0, 500, height) {
+    bph(0, 500, {
         // between 0 and 500px high
         // height breakpoints are never included in the static sheet
-    }
+    });
 
-    @include bph(0, 500) {
-        // exactly the same as above - shortcut
-    }
+    .bph(500, {
+        // above 500px high
+    });
 }
 ```
 
 #### Options
 
-You can customise a number of options in the SCSS. When doing this, if you're also using the JS library, make sure you update the values to match there as well.
+You can customise a number of options in the LESS. When doing this, if you're also using the JS library, make sure you update the values to match there as well.
 
 ##### Flags
 
-Set these flags early in the document, they can be included after you include the breakpoint scss file, however should be set before any usage of the mixin.
+Set these flags early in the document, they can be included after you include the breakpoint less file, however should be set before any usage of the mixin.
 
-```scss
-$IS_RESPONSIVE: true; // [boolean] tells the mixin to either export media queries or not
-$FONT_BASE: 16; // [number] base font size (in px) of your site
+```less
+@IS_RESPONSIVE: true; // [boolean] tells the mixin to either export media queries or not
+@FONT_BASE: 16; // [number] base font size (in px) of your site
 ```
 
 ##### Breakpoints
 
-The default breakpoints can be updated simply by editing the following variables. These should be set *before* the scss mixin is included into the page.
+The default breakpoints can be updated simply by editing the following variables. These should be set *before* the less mixin is included into the page.
 
 These default values have been chosen because they are the most common screen resolutions that we normally support.
 
-```scss
-$bp-xxs-min: 359; 
-$bp-xs-min: 480; 
-$bp-s-min: 640;
-$bp-m-min: 768; // iPad portrait
-$bp-l-min: 1024; // iPad landscape
-$bp-xl-min: 1244; // 1280px screen resolution minus scrollbars
-$bp-xxl-min: 1410; // 1440px screen resolution minus scrollbars
+```less
+@bp-min-xxs: 359;
+@bp-min-xs: 480;
+@bp-min-s: 640;
+@bp-min-m: 768; // iPad portrait
+@bp-min-l: 1024; // iPad landscape
+@bp-min-xl: 1244; // 1280px screen resolution minus scrollbars
+@bp-min-xxl: 1410; // 1440px screen resolution minus scrollbars
+
+@bp-max-xxs: @bp-min-xs - 1;
+@bp-max-xs: @bp-min-s - 1;
+@bp-max-s: @bp-min-m - 1;
+@bp-max-m: @bp-min-l - 1;
+@bp-max-l: @bp-min-xl - 1;
+@bp-max-xl: @bp-min-xxl - 1;
 ```
 
-You can also completely customise your list by setting the following:
+The static stylesheet size is specified with the following two variables:
 
-```scss
-// customised - max numbers are the next breakpoints min minus 1px
-$bp-list-min: small 359, medium 768, large 1024, xlarge 1244;
-$bp-list-max: small 767, medium 1023, large 1243;
+```less
+@bp-min-static: unit(0, em);
+@bp-max-static: unit(@bp-max-l / @FONT_BASE, em);
 ```
 
 You don't need to set a maximum of the highest breakpoint.
@@ -242,85 +242,15 @@ Make sure to ensure that the values used here match the values used in the SCSS.
 
 ## Change log
 
-`1.0.5` - July 2016
-
-* Migrate GitHub organisation to: DeloitteDigitalAPAC.
-
-`1.0.3` & `1.0.4` - September 2015
-
-* Publish on npm.
-
-`1.0.2` - March 2015
-
-* Minor bug fix in options function, to allow setting of custom breakpoints.
-
-`1.0.1` - Feb 2015
-
-* Update to resolve issue with Bower getting an old tag
-
-`1.0.0` - Feb 2015
-
-* Public release
-* Documentation
-* Cleanup
-* Automatic calculation of display logic for non-responsive stylesheets (previously was manual)
-* Added height based breakpoints
-
-`0.1.1` - July 2014
-
-* Added support for inputting px based integers instead of just breakpoint names (suggested by @conhuynh)
-
-`0.1.0` - June 2014
-
-* Large rewrite
-* Dynamically generate breakpoints without multiple IF statements
-* Updated default number of breakpoints to 8
-* Include printer support
-* Changed the mixin name to `bp` to reduce RSI
-
-`0.0.2` - August 2013
-
-* Added check for responsive flag.
-* Moved static and responsive code into a single mixin
-
-`0.0.1` - May 2013
-
-* Initial build. Inspired by http://css-tricks.com/naming-media-queries/
-
-## Want to contribute?
-
-* Got an amazing idea to make the plugin better?
-* Found an annoying bug?
-
-Please don't hesitate to raise an issue through GitHub or open a pull request to show off your fancy pants coding skills - we'll really appreciate it!
-
-## Key Contributors
-
-### Deloitte Digital Australia
-* @dkeeghan
-* @keeganstreet
+This repo is kept in line with the project [DDBreakpoints by DeloitteDigitalAPAC]https://github.com/DeloitteDigitalAPAC/DDBreakpoints. See that project for details.
 
 ## Background
 
-The Breakpoints SCSS mixin and JavaScript library, which is made up of an SCSS Mixin and some JavaScript. We use this tool to accelerate our development process when creating responsive websites and webapps - it also helps us simplify consistency accross all of our projects.
+I normally use SCSS for all the projects that I work on, and created [DDBreakpoints]https://github.com/DeloitteDigitalAPAC/DDBreakpoints to make responsive websites much easier to manage. When I was working on a project for a client who used LESS I really missed the simplicity and ease of DDBreakpoints, so I ported it across to LESS so that I could use it there.
 
-We were inspired to create DDBreakpoints back in May 2013, as a result of Chris Coyier's CSS-Tricks article: [Naming Media Queries](http://css-tricks.com/naming-media-queries/).
+My LESS skills aren't the best, and this was my first time using it, so I'm sure there are some inefficiencies in here that could be fixed, however it works perfectly for what I need it to do (which is clone the SCSS version).
 
-As we built more responsive websites, our philosophy for creating responsive sites that don't look responsive (i.e. don't use a predictable standard grid) meant that we needed to add more and more breakpoints. While we always took a mobile-first approach, we would regularly find ourselves adding an "and-below" breakpoint for edge cases. This meant that our breakpoints mixin was getting overly large and repetitively complex.
-
-Today, DDBreakpoints is used on almost every responsive project by Deloitte Digital in Australia... and now, it's available for your projects as well!
-
-
-
-
-
-## Who is Deloitte Digital?
-
-**Part Business. Part Creative. Part Technology. One hundred per cent digital.**
-
-Pioneered in Australia, Deloitte Digital is committed to helping clients unlock the business value of emerging technologies. We provide clients with a full suite of digital services, covering digital strategy, user experience, content, creative, engineering and implementation across mobile, web and social media channels.
-
-[http://www.deloittedigital.com/au](http://www.deloittedigital.com/au)
+The JS can coexist between the two projects without an issue.
 
 ## LICENSE (BSD-3-Clause)
 [View License](LICENSE)
